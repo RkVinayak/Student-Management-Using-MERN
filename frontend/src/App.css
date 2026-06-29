@@ -1,0 +1,105 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #f4f6f9;
+}
+
+.auth-container,
+.dashboard-container {
+  width: 90%;
+  max-width: 900px;
+  margin: 40px auto;
+}
+
+.form-box,
+.student-form {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.15);
+}
+
+.form-box {
+  max-width: 400px;
+  margin: 60px auto;
+}
+
+.form-box h2,
+.student-list h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form-box input,
+.student-form input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.form-box button,
+.student-form button,
+.top-bar button,
+.student-card button {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.form-box button,
+.student-form button {
+  width: 100%;
+}
+
+.form-box p {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.form-box a {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.student-form {
+  margin-bottom: 25px;
+}
+
+.student-list {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.15);
+}
+
+.student-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  padding: 15px;
+  border-radius: 10px;
+  margin-top: 15px;
+}
+
+.student-card button {
+  background: crimson;
+}
