@@ -4,17 +4,19 @@ import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
   const [students, setStudents] = useState([]);
+  const [editId, setEditId] = useState(null);
+
   const [form, setForm] = useState({
     name: "",
     age: "",
     course: "",
+    phno: "",
     city: ""
   });
 
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
-  // if no token, go to login
   useEffect(() => {
     if (!token) {
       navigate("/");
@@ -38,23 +40,32 @@ function Dashboard() {
   };
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value
+    });
   };
 
+  // Add Student
   const addStudent = async (e) => {
     e.preventDefault();
 
     try {
-      await axios.post("http://localhost:5000/api/students", form, {
-        headers: {
-          Authorization: `Bearer ${token}`
+      await axios.post(
+        "http://localhost:5000/api/students",
+        form,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
         }
-      });
+      );
 
       setForm({
         name: "",
         age: "",
         course: "",
+        phno: "",
         city: ""
       });
 
@@ -64,13 +75,61 @@ function Dashboard() {
     }
   };
 
+  // Edit Student
+  const editStudent = (student) => {
+    setForm({
+      name: student.name,
+      age: student.age,
+      course: student.course,
+      phno: student.phno,
+      city: student.city
+    });
+
+    setEditId(student._id);
+  };
+
+  // Update Student
+  const updateStudent = async (e) => {
+    e.preventDefault();
+
+    try {
+      await axios.put(
+        `http://localhost:5000/api/students/${editId}`,
+        form,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+
+      setEditId(null);
+
+      setForm({
+        name: "",
+        age: "",
+        course: "",
+        phno: "",
+        city: ""
+      });
+
+      fetchStudents();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Delete Student
   const deleteStudent = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/students/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
+      await axios.delete(
+        `http://localhost:5000/api/students/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
         }
-      });
+      );
 
       fetchStudents();
     } catch (error) {
@@ -85,12 +144,17 @@ function Dashboard() {
 
   return (
     <div className="dashboard-container">
+
       <div className="top-bar">
         <h1>Student Management Dashboard</h1>
         <button onClick={logout}>Logout</button>
       </div>
 
-      <form className="student-form" onSubmit={addStudent}>
+      <form
+        className="student-form"
+        onSubmit={editId ? updateStudent : addStudent}
+      >
+
         <input
           type="text"
           name="name"
@@ -131,7 +195,10 @@ function Dashboard() {
           onChange={handleChange}
         />
 
-        <button type="submit">Add Student</button>
+        <button type="submit">
+          {editId ? "Update Student" : "Add Student"}
+        </button>
+
       </form>
 
       <div className="student-list">
@@ -142,6 +209,7 @@ function Dashboard() {
         ) : (
           students.map((student) => (
             <div className="student-card" key={student._id}>
+
               <div>
                 <h3>{student.name}</h3>
                 <p>Age: {student.age}</p>
@@ -150,13 +218,21 @@ function Dashboard() {
                 <p>City: {student.city}</p>
               </div>
 
-              <button onClick={() => deleteStudent(student._id)}>
-                Delete
-              </button>
+              <div style={{ display: "flex", gap: "10px" }}>
+                <button onClick={() => editStudent(student)}>
+                  Edit
+                </button>
+
+                <button onClick={() => deleteStudent(student._id)}>
+                  Delete
+                </button>
+              </div>
+
             </div>
           ))
         )}
       </div>
+
     </div>
   );
 }
